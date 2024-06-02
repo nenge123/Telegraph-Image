@@ -40,9 +40,10 @@ export async function onRequestPost(context) {  // Contents of context object
         headers: request.headers,
         body: request.body,
     }).catch(e=>undefined);
-     if(!response||response.status!=200){
+    if(!response||response.status!=200){
         return response?response:new Response(null,{status:404,statusText:'error'});
-     }
+    }
+    return response;
     const data = await response.json();
     if(!data||!data.status){
         return new Response(null,{
