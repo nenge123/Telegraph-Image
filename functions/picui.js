@@ -1,3 +1,19 @@
+export async function onRequestHead(context){
+    const request = context;
+    return new Response(null,{
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+            'Access-Control-Allow-Headers': '*',
+        }
+    })
+}
+export async function onRequestGet(context){
+    return new Response(new Blob(['only on post [file]'],{type:'text/html'}),{
+        status:200,
+        statusText:'error'
+    });
+}
 export async function onRequestPost(context) {  // Contents of context object  
     const request = context.request;
      //国内免费上传
