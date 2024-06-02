@@ -34,7 +34,7 @@ export async function onRequestPost(context) {  // Contents of context object
         return response?response:new Response(null,{status:404,statusText:'error'});
      }
     const data = await response.json();
-    if(!data||!data.src){
+    if(!data){
         return new Response(null,{
             status:404,
             statusText:'error json',
@@ -43,7 +43,7 @@ export async function onRequestPost(context) {  // Contents of context object
             }
         });
     }
-    const src = 'https://im.gurl.eu.org'+data.src;
+    const src = 'https://im.gurl.eu.org'+data[0].src;
     const newdata = {
         "location":src,
         "src":src,
