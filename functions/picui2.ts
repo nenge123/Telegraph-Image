@@ -35,16 +35,13 @@ export async function onRequestPost(context) {  // Contents of context object
      //国内免费上传
      const response = await fetch(request).catch(e=>undefined);
      if(!response||response.status!=200){
-        return new Response(null,{
-            status:response?response.status:404,
-            statusText:'error'
-        });
+        return response?response:new Response(null,{status:404,statusText:'error'});
      }
     const data = await response.json();
-    if(!data){
+    if(!data||!data.data){
         return new Response(null,{
-            status:response?response.status:404,
-            statusText:'error'
+            status:404,
+            statusText:'error json'
         });
     }
     const newdata = {
