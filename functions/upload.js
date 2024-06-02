@@ -10,14 +10,6 @@ export async function onRequestOptions(){
       },
     });
   };
-  
-  // Set CORS to all /api responses
-export async function onRequest(context){
-    const response = await context.next();
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Max-Age', '86400');
-    return response;
-};
 export async function onRequestGet(context){
     return new Response(new Blob(['only on post [file]'],{type:'text/html'}),{
         status:200,
@@ -41,7 +33,10 @@ export async function onRequestPost(context) {  // Contents of context object
     if(!data||!data.data){
         return new Response(null,{
             status:404,
-            statusText:'error json'
+            statusText:'error json',
+            headers:{
+                'Access-Control-Allow-Origin':'*'
+            }
         });
     }
     const src = 'https://im.gurl.eu.org'+data.src;
