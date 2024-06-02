@@ -33,19 +33,20 @@ export async function onRequestGet(context){
 export async function onRequestPost(context) {  // Contents of context object  
     const request = context.request;
      //国内免费上传
-     const response = await fetch('https://picui.cn/upload', {
-         method: 'POST',
-         credentials: "include",
-         headers: request.headers,
-         body: request.body,
-     });
+     const response = await fetch(request).catch(e=>undefined);
      if(!response||response.status!=200){
         return new Response(null,{
             status:response?response.status:404,
             statusText:'error'
         });
      }
-    const data = await  response.json();
+    const data = await response.json();
+    if(!data){
+        return new Response(null,{
+            status:response?response.status:404,
+            statusText:'error'
+        });
+    }
     const newdata = {
         "location":data.data.links.url,
         "src":data.data.links.url,
