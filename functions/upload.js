@@ -34,7 +34,7 @@ export async function onRequestPost(context) {  // Contents of context object
         return response?response:new Response(null,{status:404,statusText:'error'});
      }
     const data = await response.json();
-    if(!data||!data.data){
+    if(!data||!data.src){
         return new Response(null,{
             status:404,
             statusText:'error json',
