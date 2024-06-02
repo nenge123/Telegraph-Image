@@ -10,15 +10,7 @@ export async function onRequestOptions(){
       },
     });
   };
-  
-  // Set CORS to all /api responses
-export async function onRequest(context){
-    const response = await context.next();
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Max-Age', '86400');
-    return response;
-};
-export async function onRequestGet(context){
+export async function onRequestGet(){
     return new Response(new Blob(['only on post [file]'],{type:'text/html'}),{
         status:200,
         statusText:'error',
@@ -33,34 +25,30 @@ export async function onRequestGet(context){
 export async function onRequestPost(context) {  // Contents of context object  
     const request = context.request;
      //国内免费上传
-     const response = await fetch('https://picui.cn/upload/',
-     {
+     const response = await fetch('https://telegra.ph/upload', {
         method: request.method,
-        credentials:'include',
         headers: request.headers,
         body: request.body,
     }).catch(e=>undefined);
+    return response;
      if(!response||response.status!=200){
         return response?response:new Response(null,{status:404,statusText:'error'});
      }
     const data = await response.json();
-    if(!data||!data.data){
+    if(!data||!data.src){
         return new Response(null,{
             status:404,
-            statusText:'error json'
+            statusText:'error json',
+            headers:{
+                'Access-Control-Allow-Origin':'*'
+            }
         });
     }
+    const src = 'https://im.gurl.eu.org'+data.src;
     const newdata = {
-        "location":data.data.links.url,
-        "src":data.data.links.url,
-        "default":data.data.links.url,
-        "originname":data.data.origin_name,
-        "size": Math.floor(data.data.size),
-        "mime": data.data.mimetype,
-        "md5": data.data.md5,
-        "sha1": data.data.sha1,
-        "width": data.data.width,
-        "height": data.data.height
+        "location":src,
+        "src":src,
+        "default":src,
     };
     let headers = new Headers(response.headers);
     headers.set('Access-Control-Allow-Origin', '*');
