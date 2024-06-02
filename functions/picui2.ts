@@ -1,5 +1,5 @@
 // Respond to OPTIONS method
-export const onRequestOptions: PagesFunction = async () => {
+export async function onRequestOptions(){
     return new Response(null, {
       status: 204,
       headers: {
@@ -12,7 +12,7 @@ export const onRequestOptions: PagesFunction = async () => {
   };
   
   // Set CORS to all /api responses
-export const onRequest: PagesFunction = async (context) => {
+export async function onRequest(context){
     const response = await context.next();
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Max-Age', '86400');
@@ -34,13 +34,14 @@ export async function onRequestPost(context) {  // Contents of context object
     const request = context.request;
      //国内免费上传
      const response = await fetch('https://picui.cn/upload', {
-         method: request.method,
+         method: 'POST',
+         credentials: "include",
          headers: request.headers,
          body: request.body,
      });
-     if(!response||!response.ok){
+     if(!response||response.status!=200){
         return new Response(null,{
-            status:404,
+            status:response?response.status:404,
             statusText:'error'
         });
      }
